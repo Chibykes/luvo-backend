@@ -69,7 +69,7 @@ app.get('/transactions', ensureAuth, async(req, res) => {
     res.json({
         status: 2,
         data,
-        user: await Users.findOne({ _id: req.user._id }, '_id fullname tag email phone balance')
+        user: await Users.findOne({ _id: req.user._id }, '_id fullname tag email phone balance role')
     })
 });
 
@@ -113,7 +113,7 @@ app.post('/pay', ensureAuth, async(req, res) => {
     res.json({ 
         status: 2,
         data: null,
-        user: await Users.findOne({ _id: req.user._id }, '_id fullname tag email phone balance')
+        user: await Users.findOne({ _id: req.user._id }, '_id fullname tag email phone balance role')
     });
 
 });
@@ -137,7 +137,7 @@ app.post('/profile', ensureAuth, async(req, res) => {
     res.json({ 
         status: 2,
         data: null,
-        user: await Users.findOne({ _id: req.user._id }, '_id fullname tag email phone balance')
+        user: await Users.findOne({ _id: req.user._id }, '_id fullname tag email phone balance role')
     });
 
 });
@@ -173,7 +173,7 @@ app.post("/webhook", async function(req, res) {
 
 app.get('/user', async(req, res) => {res.json({
         status: 2,
-        user: await Users.findOne({ _id: req.user._id }, '_id fullname tag email phone balance')
+        user: await Users.findOne({ _id: req.user._id }, '_id fullname tag email phone balance role')
     })
 });
 
