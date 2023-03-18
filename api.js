@@ -50,7 +50,7 @@ app.post('/login', (req, res, next) => {
     })(req, res, next);
 });
 
-app.post('/validate', ensureAuth, async(req,res) => {
+app.post('/validate', async(req,res) => {
 
     const data = await Users.findOne(req.body);
 
@@ -127,8 +127,6 @@ app.post('/profile', ensureAuth, async(req, res) => {
             bcrypt.genSaltSync(10)
         );
     }
-
-    console.log(req.body)
 
     await Users.findOneAndUpdate(
         { _id: req?.user._id },
