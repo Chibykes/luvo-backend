@@ -149,6 +149,8 @@ app.post("/webhook", async function(req, res) {
     //     // Do something with event  
     // }
 
+    console.log(req.body);
+
     const { event, data } = req.body;
     if(event === "charge.success"){
         const transaction = await Transactions.findOneAndUpdate(
