@@ -158,12 +158,12 @@ app.post("/webhook", async function(req, res) {
             { returnOriginal: false }
         );
 
-        if(transaction){
-            await Users.findOneAndUpdate(
-                { _id: transaction.to },
-                { $inc: { balance: Number(transaction.amount) } }
-            )
-        }
+        if(!transaction) return res.sendStatus(200);
+
+        await Users.findOneAndUpdate(
+            { _id: transaction.to },
+            { $inc: { balance: Number(transaction.amount) } }
+        )
 
     }
 
