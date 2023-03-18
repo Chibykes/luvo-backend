@@ -17,6 +17,7 @@ const TransactionSchema = new Schema({
     amount: {type: Number, default: 0},
     reference: {type: String},
     payment_data: {type: Object},
+    status: { type: String, default: 'success' },
 
 }, {timestamps: true});
 

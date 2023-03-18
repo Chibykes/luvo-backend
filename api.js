@@ -78,7 +78,8 @@ app.post('/fund-wallet', ensureAuth, async(req, res) => {
     Transactions.create({
         type: "funding",
         ...req.body,
-        to: req?.user._id
+        to: req?.user._id,
+        status: 'processing',
     });
 
     res.json({ 
@@ -154,14 +155,9 @@ app.post("/webhook", async function(req, res) {
     if(event === "charge.success"){
         const transaction = await Transactions.findOneAndUpdate(
             { reference: data.reference },
-            { payment_data: data },
+            { payment_data: data, status: 'success' },
             { returnOriginal: false }
         );
-
-        console.log({
-            ...req.body,
-            transaction
-        })
 
         if(!transaction) return res.sendStatus(200);
 
