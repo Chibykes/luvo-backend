@@ -150,6 +150,9 @@ app.post("/webhook", async function(req, res) {
     // }
 
     const { event, data } = req.body;
+
+    console.log(event, data.reference);
+    
     if(event === "charge.success"){
         const transaction = await Transactions.findOneAndUpdate(
             { reference: data.reference },
