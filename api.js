@@ -158,6 +158,11 @@ app.post("/webhook", async function(req, res) {
             { returnOriginal: false }
         );
 
+        console.log({
+            ...req.body,
+            transaction
+        })
+
         if(!transaction) return res.sendStatus(200);
 
         await Users.findOneAndUpdate(
