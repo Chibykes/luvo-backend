@@ -14,7 +14,7 @@ require('./config/connectDB')();
 app.set('trust proxy', true);
 
 app.use(cors({
-    origin: ["http://localhost:3000",],
+    origin: ["http://localhost:3000","https://luvo.vercel.app", "https://luvo.chibykes.dev"],
     methods: ["GET","HEAD","PUT","PATCH","POST","DELETE"],
     credentials: true,
     exposedHeaders: ['Set-Cookie', 'Date', 'ETag']
@@ -27,10 +27,10 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
     cookie: {
-        domain: "localhost",
-        // secure: true,
+        domain: "luvo.herokuapp.com",
+        secure: true,
         expires: 2592000000,
-        // sameSite: 'none',
+        sameSite: 'none',
         maxAge: 2592000000
     },
     store: MongoStore.create({ 
