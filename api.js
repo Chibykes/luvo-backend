@@ -173,7 +173,7 @@ app.post("/webhook", async function(req, res) {
 
 app.get('/user', async(req, res) => {res.json({
         status: 2,
-        user: await Users.findOne({ _id: req.user._id }, '_id fullname tag email phone balance role')
+        user: await Users.findOne({ _id: req.user._id }, '_id fullname tag company email phone balance role')
     })
 });
 
