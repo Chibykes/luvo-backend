@@ -178,7 +178,7 @@ app.get('/user', async(req, res) => {res.json({
 });
 
 app.get('/logout', (req, res)=>{
-    req.logOut();
+    req.logout();
     res.json({
         status: 2,
         msg: 'User Succeesfully Logged Out...',
