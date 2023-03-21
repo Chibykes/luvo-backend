@@ -178,7 +178,10 @@ app.get('/user', async(req, res) => {res.json({
 });
 
 app.get('/logout', (req, res)=>{
-    req.logout();
+    req.logout((err) => {
+        console.log(err);
+    });
+
     res.json({
         status: 2,
         msg: 'User Succeesfully Logged Out...',
