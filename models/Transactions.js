@@ -15,6 +15,10 @@ const TransactionSchema = new Schema({
         ref: Users
     },
     amount: {type: Number, default: 0},
+    bank_name: {type: String},
+    bank_code: {type: String},
+    account_number: {type: String},
+    account_name: {type: String},
     reference: {type: String},
     payment_data: {type: Object},
     status: { type: String, default: 'success' },

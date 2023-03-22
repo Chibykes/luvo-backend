@@ -90,6 +90,27 @@ app.post('/fund-wallet', ensureAuth, async(req, res) => {
 
 });
 
+app.post('/payout', ensureAuth, async(req, res) => {
+
+    Transactions.create({
+        type: "withdrawal",
+        ...req.body,
+        from: req?.user._id,
+        status: 'success',
+    });
+
+    await Users.findOneAndUpdate(
+        { _id: req?.user._id },
+        { $inc: { balance: -Number(req.body.amount) } }
+    )
+
+    res.json({ 
+        status: 2,
+        data: null
+    });
+
+});
+
 app.post('/pay', ensureAuth, async(req, res) => {
 
     const to = await Users.findOne({ tag: req.body.tag }, '_id');
@@ -143,35 +164,6 @@ app.post('/profile', ensureAuth, async(req, res) => {
 
 });
 
-app.post("/webhook", async function(req, res) {
-    // const hash = crypto.createHmac('sha512', secret).update(JSON.stringify(req.body)).digest('hex');
-    // if (hash == req.headers['x-paystack-signature']) {
-    //     // Retrieve the request's body
-    //     const event = req.body;
-    //     // Do something with event  
-    // }
-
-    const { event, data } = req.body;
-
-    if(event === "charge.success"){
-        const transaction = await Transactions.findOneAndUpdate(
-            { reference: data.reference },
-            { payment_data: data, status: 'success' },
-            { returnOriginal: false }
-        );
-
-        if(!transaction) return res.sendStatus(200);
-
-        await Users.findOneAndUpdate(
-            { _id: transaction.to },
-            { $inc: { balance: Number(transaction.amount) } }
-        )
-
-    }
-
-    res.sendStatus(200);
-});
-
 app.get('/user', async(req, res) => {res.json({
         status: 2,
         user: await Users.findOne({ _id: req.user._id }, '_id fullname tag company email phone balance role')
@@ -199,7 +191,7 @@ app.post('/validate-bank', async(req, res) => {
         status: 1,
         data: null
     })
-})
+});
 
 app.get('/banks', async(req, res) => {
     const resp = await fetch("https://api.paystack.co/bank", { 
@@ -214,7 +206,7 @@ app.get('/banks', async(req, res) => {
         status: 2,
         banks
     })
-})
+});
 
 app.get('/logout', (req, res)=>{
     req.logout((err) => {
@@ -225,6 +217,37 @@ app.get('/logout', (req, res)=>{
         status: 2,
         msg: 'User Succeesfully Logged Out...',
     })
+});
+
+
+
+app.post("/webhook", async function(req, res) {
+    // const hash = crypto.createHmac('sha512', secret).update(JSON.stringify(req.body)).digest('hex');
+    // if (hash == req.headers['x-paystack-signature']) {
+    //     // Retrieve the request's body
+    //     const event = req.body;
+    //     // Do something with event  
+    // }
+
+    const { event, data } = req.body;
+
+    if(event === "charge.success"){
+        const transaction = await Transactions.findOneAndUpdate(
+            { reference: data.reference },
+            { payment_data: data, status: 'success' },
+            { returnOriginal: false }
+        );
+
+        if(!transaction) return res.sendStatus(200);
+
+        await Users.findOneAndUpdate(
+            { _id: transaction.to },
+            { $inc: { balance: Number(transaction.amount) } }
+        )
+
+    }
+
+    res.sendStatus(200);
 });
 
 module.exports = app;
