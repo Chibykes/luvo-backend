@@ -180,7 +180,7 @@ app.get('/user', async(req, res) => {res.json({
 
 app.post('/validate-bank', async(req, res) => {
     const searchparams = new URLSearchParams(req.body);
-    const resp = await fetch("https://api.paystack.co/bank"+searchparams.toString(), { 
+    const resp = await fetch("https://api.paystack.co/bank/resolve?"+searchparams.toString(), { 
         headers: { 
             "Authorization": `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
             'Content-Type': 'application/json',
