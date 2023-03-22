@@ -5,6 +5,7 @@ const app = express.Router();
 const passport = require('passport');
 const bcrypt = require('bcryptjs');
 const { ensureAuth } = require('./config/auth');
+const fetch = require('node-fetch');
 
 var crypto = require('crypto');
 var secret = process.env.SECRET_KEY;
@@ -176,6 +177,38 @@ app.get('/user', async(req, res) => {res.json({
         user: await Users.findOne({ _id: req.user._id }, '_id fullname tag company email phone balance role')
     })
 });
+
+app.post('/validate-bank', async(req, res) => {
+    const searchparams = new URLSearchParams(req.body);
+    const resp = await fetch("https://api.paystack.co/bank"+searchparams.toString(), { 
+        headers: { 
+            "Authorization": `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+            'Content-Type': 'application/json',
+        }
+    });
+    
+    const { data } = await resp.json();
+
+    res.json({
+        status: 2,
+        data
+    })
+})
+
+app.get('/banks', async(req, res) => {
+    const resp = await fetch("https://api.paystack.co/bank", { 
+        headers: { 
+            "Authorization": `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+            'Content-Type': 'application/json',
+        }
+    });
+    const { data: banks } = await resp.json();
+
+    res.json({
+        status: 2,
+        banks
+    })
+})
 
 app.get('/logout', (req, res)=>{
     req.logout((err) => {
