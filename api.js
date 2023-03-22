@@ -188,7 +188,7 @@ app.post('/validate-bank', async(req, res) => {
     });
     
     const { status, data } = await resp.json();
-    if(status === "true"){
+    if(status){
         return res.json({
             status: 2,
             data
